@@ -1,1 +1,1 @@
-# STD24011-API-EXAM
+# k2-pokedex
