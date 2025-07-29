@@ -5,6 +5,27 @@ export default function Pokedex() {
     const [pokemon ,setPokemon] = useState([])
     const [modal, setModal] = useState(false);
     const [card, setCard] = useState(0);
+    const typeColorClasses = {
+  normal: 'bg-[#A8A878]',
+  fire: 'bg-[#F08030]',
+  water: 'bg-[#6890F0]',
+  electric: 'bg-[#F8D030]',
+  grass: 'bg-[#78C850]',
+  ice: 'bg-[#98D8D8]',
+  fighting: 'bg-[#C03028]',
+  poison: 'bg-[#A040A0]',
+  ground: 'bg-[#E0C068]',
+  flying: 'bg-[#A890F0]',
+  psychic: 'bg-[#F85888]',
+  bug: 'bg-[#A8B820]',
+  rock: 'bg-[#B8A038]',
+  ghost: 'bg-[#705898]',
+  dragon: 'bg-[#7038F8]',
+  dark: 'bg-[#705848]',
+  steel: 'bg-[#B8B8D0]',
+  fairy: 'bg-[#EE99AC]'
+};
+
 
     const toggleModal = (id) => {
         setModal(!modal);
@@ -44,6 +65,7 @@ export default function Pokedex() {
     }, []);
 
 
+  
    return (
         <div>
             <div className="flex flex-row justify-evenly items-center p-5 bg-blue-500">
