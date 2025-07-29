@@ -44,7 +44,6 @@ export default function Pokedex() {
     }, []);
 
 
-
    return (
         <div>
             <div className="flex flex-row justify-evenly items-center p-5 bg-blue-500">
@@ -56,7 +55,7 @@ export default function Pokedex() {
                         <input type="text" className="h-5 ml-5"/>
                     <button className="ml-5 bg-gray-100 w-20 rounded-sm" onClick={toSearch}>Search</button>
                     </div>
-                   <button onClick={getAll} className="ml-5 w-20 h-8 mt-1 rounded full bg-blue-200">reset</button>
+                   <button onClick={getAll} className="ml-5 w-20 h-8 mt-1 rounded full bg-yellow-200">reset</button>
                 </div>
  
             </div>
@@ -71,7 +70,7 @@ export default function Pokedex() {
                                             <img src={pokemonList?.sprites?.front_default} alt="" className="items-center justify-center"/>
                                         </div>
                                         <div>
-                                    <h2 className="text-center">{pokemonList?.name}</h2>
+                                    <h2 className="text-center ">{pokemonList?.name}</h2>
                                     <p className="text-center">Types: {pokemonList?.types.map(type => type.type.name).join(', ')}</p>
                                         </div>
                                     </div>
@@ -82,32 +81,33 @@ export default function Pokedex() {
             </div>   
        ))}
 
-            <div className="absolute ">{pokemon
+            <div className="absolute">{pokemon
                 .map((p, id) => (
                     <div key={id} className="">
                         {modal && card === id && (
-                            <div className="fixed bg-white ml-18 w-300 h-110 mb-40 align-middle rounded-lg shadow-lg p-4 ">
-                                <h2 className="text-center bold">{p?.name}</h2>
-                                <img src={p?.sprites?.front_default} alt="" className="ml-120 h-50 " />
-                                <div className="flex flex-row items-center">
-                            <div>
-                                <p>Height: {p?.height}</p>
-                                <p>Weight: {p?.weight}</p>
-                                <p>Types: {p?.types.map(type => type.type.name).join(', ')}</p>
-                                 <p>Abilities: {p?.abilities.map(ability => ability.ability.name).join(', ')}</p>
-                            </div>
-                            <div>
-                               
-                        <p>Stats:</p>
-                            <ul className="list-disc pl-5">
+                            <div className="w-200 h-100 bg-white p-4 rounded-lg shadow-lg fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 ">
+                                <div className="flex flex-row">
+                                    <h2 className="text-xl">{p?.name}</h2>
+                                    <img src={p?.sprites?.front_default} alt="" className="w-50" />
+                                    <div className="ml-40">     
+                                    <p>Height: {p?.height}</p>
+                                    <p>Weight: {p?.weight}</p>
+                                    <p>Types: {p?.types.map(type => type.type.name).join(', ')}</p>
+                                    <p>Abilities: {p?.abilities.map(ability => ability.ability.name).join(', ')}</p>                           
+                                    <div>
+                                <p>Stats:</p>
+                            <ul className="list-disc pl-5 grid grid-cols-2 gap-4">
                             {p?.stats.map(stat => (
-                                <li key={stat.stat.name}>
-                                    {stat.stat.name}: {stat.base_stat}
-                                </li>
+                                <div key={stat.stat.name}>
+                                    <h3>{stat.stat.name}</h3>
+                                    <p>{stat.base_stat}</p>
+                                </div>
                             ))}
                         </ul>
                             </div>
                         </div>
+                            </div>
+
                         <button onClick={() => toggleModal(0)}>Close</button>
                     </div>
                 )}
