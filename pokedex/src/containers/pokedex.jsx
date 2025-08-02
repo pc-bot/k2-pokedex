@@ -1,15 +1,43 @@
 import { useState, useEffect } from "react";
 
 export default function Pokedex() {
-    const [pokemonUrl ,setPokemonUrl] = useState([])
-    const [pokemon ,setPokemon] = useState([])
+    const [pokemonUrl, setPokemonUrl] = useState([]);
+    const [pokemon, setPokemon] = useState([]);
     const [modal, setModal] = useState(false);
     const [card, setCard] = useState(0);
+    const typeColorClasses = {
+        normal: 'bg-[#A8A878]',
+        fire: 'bg-[#F08030]',
+        water: 'bg-[#6890F0]',
+        electric: 'bg-[#F8D030]',
+        grass: 'bg-[#78C850]',
+        ice: 'bg-[#98D8D8]',
+        fighting: 'bg-[#C03028]',
+        poison: 'bg-[#A040A0]',
+        ground: 'bg-[#E0C068]',
+        flying: 'bg-[#A890F0]',
+        psychic: 'bg-[#F85888]',
+        bug: 'bg-[#A8B820]',
+        rock: 'bg-[#B8A038]',
+        ghost: 'bg-[#705898]',
+        dragon: 'bg-[#7038F8]',
+        dark: 'bg-[#705848]',
+        steel: 'bg-[#B8B8D0]',
+        fairy: 'bg-[#EE99AC]'
+    };
+    const bgColors = [
+        'bg-red-100',
+        'bg-blue-100',
+        'bg-green-100',
+        'bg-yellow-100',
+        'bg-purple-100'
+    ];
 
     const toggleModal = (id) => {
         setModal(!modal);
         setCard(id);
     };
+
     const toSearch = () => {
         const searchInput = document.querySelector('input[type="text"]');
         const results = pokemon.filter(p => p
@@ -17,87 +45,101 @@ export default function Pokedex() {
             .toLowerCase()
             .startsWith(searchInput.value.toLowerCase()));
         setPokemon(results);
-    }
+    };
 
     const getAll = async () => {
         fetch('https://pokeapi.co/api/v2/pokemon?limit=500&offset=0')
-        .then(res => {return res.json()})
-        .then(data => {
-           setPokemonUrl(data.results);
-           const urls = data.results.map(p => p.url);
-           return Promise.all(urls
-            .map(url => fetch(url)
-            .then(res => res.json())));
-        })
-        .then(data => {
-            console.log(data);
-            setPokemon(data);
-        })
-        .catch((error) => {
-            console.error("le site ne fonctionne pas");
-        });
-    }
+            .then(res => res.json())
+            .then(data => {
+                setPokemonUrl(data.results);
+                const urls = data.results.map(p => p.url);
+                return Promise.all(urls
+                    .map(url => fetch(url)
+                        .then(res => res.json())));
+            })
+            .then(data => {
+                console.log(data);
+                setPokemon(data);
+            })
+            .catch((error) => {
+                console.error("le site ne fonctionne pas");
+            });
+    };
 
     useEffect(() => {
         getAll();
     }, []);
 
-
-   return (
+    return (
         <div>
-            <div>
-                <input type="text" />
-                <button className="bg-blue-500 h-10 text-white p-2 rounded" onClick={toSearch}>Search</button>
-                <button onClick={getAll}>reset</button>
-            </div>
-       <div className="grid grid-cols-5 gap-4">
-        {pokemon.map((pokemonList, id) => (
-            <div>
-           <div className="">
-               <div key={id} className="">
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <img src={pokemonList?.sprites?.front_default} alt="" />
-                        <h2>{pokemonList?.name}</h2>
-                        <p>Types: {pokemonList?.types.map(type => type.type.name).join(', ')}</p>
-                        <button onClick={() => toggleModal(id)} className="bg-blue-500 h-10 text-white p-2 rounded">more info</button> 
+            <div className="flex flex-row justify-evenly items-center p-5 bg-blue-500">
+                <div>
+                    <img src="logoPokedex.png" alt="Pokedex Logo" />
+                    logo
+                </div>
+                <div className="flex flex-row">
+                    <div className="bg-white p-2 w-90 rounded-full shadow-lg">
+                        <input type="text" className="h-5 ml-5" />
+                        <button className="ml-5 bg-gray-100 w-20 rounded-sm" onClick={toSearch}>Search</button>
                     </div>
-                </div> 
+                    <button onClick={getAll} className="ml-5 w-20 h-8 mt-1 rounded full bg-yellow-200">reset</button>
+                </div>
             </div>
-            </div>   
-       ))}
-
-       <div className="absolute">{pokemon
-       .map((p, id) => (
-           <div key={id} className="">
-                {modal && card === id && (
-                    <div className="fixed bg-white ml-18 mt-6 w-300 h-130 align-middle rounded-lg shadow-lg p-4 ">
-                            <h2 className="text-center bold">{p?.name}</h2> 
-                            <img src={p?.sprites?.front_default} alt="" className="ml-120 h-50"/> 
-                        <div className="flex flex-row items-center">                        
-                            <div>
-                                <p>Height: {p?.height}</p>
-                                <p>Weight: {p?.weight}</p>
-                                <p>Types: {p?.types.map(type => type.type.name).join(', ')}</p>
-                                 <p>Abilities: {p?.abilities.map(ability => ability.ability.name).join(', ')}</p>
-                            </div>
-                            <div>
-                               
-                        <p>Stats:</p>
-                            <ul className="list-disc pl-5">
-                            {p?.stats.map(stat => (
-                                <li key={stat.stat.name}>
-                                    {stat.stat.name}: {stat.base_stat}
-                                </li>
-                            ))}
-                        </ul>
+            <div className="grid grid-cols-5 gap-4 mt-20">
+                {pokemon.map((pokemonList, id) => (
+                    <div key={id} className="">
+                        <div className="">
+                            <div className="">
+                                {/* Apply background color based on column index */}
+                                <div className={`p-4 rounded-lg shadow-lg ${bgColors[id % 5]}`}>
+                                    <div className="flex flex-row items-center">
+                                        <div>
+                                            <img src={pokemonList?.sprites?.front_default} alt={pokemonList?.name} className="items-center justify-center" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-center">{pokemonList?.name}</h2>
+                                            <p className="text-center">Types: {pokemonList?.types.map(type => type.type.name).join(', ')}</p>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => toggleModal(id)} className="bg-blue-500 ml-10 w-30 h-8 text-sm text-white p-2 rounded">more info</button>
+                                </div>
                             </div>
                         </div>
-                        <button onClick={() => toggleModal(0)}>Close</button>
                     </div>
-                )}
+                ))}
             </div>
-       ))}</div>
-       </div>
-        </div> 
-   )
+            <div className="absolute">
+                {pokemon.map((p, id) => (
+                    <div key={id} className="">
+                        {modal && card === id && (
+                            <div className="w-200 h-100 bg-white p-4 rounded-lg shadow-lg fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+                                <div className="flex flex-row">
+                                    <h2 className="text-xl">{p?.name}</h2>
+                                    <img src={p?.sprites?.front_default} alt={p?.name} className="w-50" />
+                                    <div className="ml-40">
+                                        <p>Height: {p?.height}</p>
+                                        <p>Weight: {p?.weight}</p>
+                                        <p>Types: {p?.types.map(type => type.type.name).join(', ')}</p>
+                                        <p>Abilities: {p?.abilities.map(ability => ability.ability.name).join(', ')}</p>
+                                        <div>
+                                            <p>Stats:</p>
+                                            <ul className="list-disc pl-5 grid grid-cols-2 gap-4">
+                                                {p?.stats.map(stat => (
+                                                    <div key={stat.stat.name}>
+                                                        <h3>{stat.stat.name}</h3>
+                                                        <p>{stat.base_stat}</p>
+                                                    </div>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onClick={() => toggleModal(0)}>Close</button>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
